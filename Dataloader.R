@@ -14,10 +14,11 @@ rd <- subset(r, r$AHIVneg==1)
 
 # locate and standardize diagnostic data based on column headers --------------------------
 upid<-rd$UPID...1
-mrs<-rd$MRS           #main reference standard
+mrs<-rd$MRS_STRICT           #main reference standard
 crs<-rd$CRS           #alternative reference standard
 index<-rd$FujiRIT_FC  #index test for main analysis
 comp1<-rd$AlereRIT_FC #comparator test for main analysis
+comp2<-rd$HSMSDC_LAMConcentrationCorr
 sex<-rd$SEX 
 age<-rd$AGE
 cd4<-rd$CD4CNT
@@ -26,13 +27,20 @@ sp2xp<-rd$SP2_XP
 sp3xp<-rd$SP3_XP
 spxpany<-rd$SP_XP_ANY
 
-d = data.frame(upid,mrs, crs, cd4, index, comp1, sex, age, sp1xp)
+d = data.frame(upid,mrs, crs, cd4, index, comp1, comp2, sex, age, sp1xp)
 
 
 # Compare Diagnostic accuracy -----------------------------------------------------
 tab<-tab.paired(d$mrs, d$index, d$comp1)
 acc<-acc.paired(tab) 
 pval<-sesp.mcnemar(tab) #mcnemar p-values
+
+P.indextab <- tab.1test(d$mrs, d$index , ,'FujiLAM')
+P.index <- acc.1test(P.indextab)
+P.comptab <- tab.1test(d$mrs, d$comp1 , ,'AlereLAM')
+P.comp<-acc.1test(P.comptab)
+print(a2)
+
 
 # Write results to .csv file ----------------------
 write.table("data/results.csv", output_file)
