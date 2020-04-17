@@ -24,5 +24,5 @@ tab<-tab.paired(d$mrs, d$index, d$comp1)
 acc<-acc.paired(tab)
 
 
-# Write results to .csv file --------------------
+# Write results to .csv file ----------------------
 write.table("data/results.csv", output_file)
